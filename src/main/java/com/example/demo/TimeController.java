@@ -9,20 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TimeController {
-
-    private final TimeRepository timeRepository;
+    public final TimeRepository timeRepository;
 
     public TimeController(TimeRepository timeRepository) {
         this.timeRepository = timeRepository;
     }
 
-    @GetMapping("/times") 
+    @GetMapping("/times")
     List<Time> getAllTimes() {
         return timeRepository.findAll();
     }
 
     @PostMapping("/times")
     Time newTime(@RequestBody Time newTime) {
-        return timeRepository.save(newTime); //någon kontroll ifall time är null?
+        if (newTime == null) {
+            throw new IllegalArgumentException("newTime cannot be null");
+        }
+        return timeRepository.save(newTime);
     }
 }
